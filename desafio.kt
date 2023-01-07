@@ -2,20 +2,39 @@
 
 enum class Nivel { BASICO, INTERMEDIARIO, DIFICIL }
 
-class Usuario
+data class Aluno(val nome: String)
 
-data class ConteudoEducacional(var nome: String, val duracao: Int = 60)
+data class ConteudoEducacional(var conteudo: String, val duracao: Int)
 
-data class Formacao(val nome: String, var conteudos: List<ConteudoEducacional>) {
+data class Formacao(val nome: String, val nivel: Nivel, val conteudos: List<ConteudoEducacional>) 
+{
+    val inscritos = mutableListOf<Aluno>()
+    val inscritosLeitura = inscritos
 
-    val inscritos = mutableListOf<Usuario>()
+    fun matriculados(): List<Aluno>
+    {
+        return inscritosLeitura
+    }
     
-    fun matricular(usuario: Usuario) {
-        TODO("Utilize o parâmetro $usuario para simular uma matrícula (usar a lista de $inscritos).")
+    fun matricular(vararg alunos: Aluno) 
+    {
+        for(aluno in alunos)
+        {
+            inscritos.add(aluno)
+            println("${aluno.nome} cadastrado com sucesso!")
+        }
     }
 }
 
-fun main() {
-    TODO("Analise as classes modeladas para este domínio de aplicação e pense em formas de evoluí-las.")
-    TODO("Simule alguns cenários de teste. Para isso, crie alguns objetos usando as classes em questão.")
+fun main()
+{
+    val variaveis = ConteudoEducacional("variaveis", 30)
+    val funcoes = ConteudoEducacional("funcoes", 60)
+    val classes = ConteudoEducacional("classes", 60)
+
+    val conteudosKotlin : List<ConteudoEducacional> = listOf(variaveis, funcoes, classes)
+    val kotlin : Formacao = Formacao("Kotlin", Nivel.BASICO, conteudosKotlin)
+
+    kotlin.matricular(Aluno("Ana"), Aluno("José"), Aluno("Gabriel"))
+    println(kotlin.matriculados())
 }
